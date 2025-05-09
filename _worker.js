@@ -118,7 +118,7 @@ function getAllConfig(request, hostName, proxyList, page = 0) {
 
     // Build HTML
     const document = new Document(request);
-    document.setTitle("Welcome to <span class='text-blue-500 font-semibold'>Nautica</span>");
+    document.setTitle("Welcome to <span class='text-blue-500 font-semibold'>Nautica x badcode</span>");
     document.addInfo(`Total: ${proxyList.length}`);
     document.addInfo(`Page: ${page}/${Math.floor(proxyList.length / PROXY_PER_PAGE)}`);
 
@@ -1076,97 +1076,99 @@ class CloudflareApi {
  */
 let baseHTML = `
 <!DOCTYPE html>
-<html lang="id" class="scroll-auto dark">
+<html lang="en" id="html" class="scroll-auto scrollbar-hide dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Daftar Proxy</title>
+    <title>Proxy List</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      /* Untuk browser berbasis Webkit (Chrome, Safari dan Opera) */
+      /* For Webkit-based browsers (Chrome, Safari and Opera) */
       .scrollbar-hide::-webkit-scrollbar {
-        display: none;
+          display: none;
       }
 
-      /* Untuk IE, Edge dan Firefox */
+      /* For IE, Edge and Firefox */
       .scrollbar-hide {
-        -ms-overflow-style: none;  /* IE dan Edge */
-        scrollbar-width: none;  /* Firefox */
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
       }
     </style>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
     <script>
       tailwind.config = {
-        darkMode: 'class',
+        darkMode: 'selector',
       }
     </script>
   </head>
-  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <body class="bg-white dark:bg-neutral-800 bg-fixed">
     <!-- Notification -->
     <div
       id="notification-badge"
-      class="fixed z-50 opacity-0 transition-opacity ease-in-out duration-300 top-4 right-4 p-3 max-w-sm bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 flex items-center gap-x-4"
+      class="fixed z-50 opacity-0 transition-opacity ease-in-out duration-300 mt-9 mr-6 right-0 p-3 max-w-sm bg-white rounded-xl border border-2 border-neutral-800 flex items-center gap-x-4"
     >
       <div class="shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6 text-blue-500">
-          <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#171717" class="size-6">
+          <path
+            d="M5.85 3.5a.75.75 0 0 0-1.117-1 9.719 9.719 0 0 0-2.348 4.876.75.75 0 0 0 1.479.248A8.219 8.219 0 0 1 5.85 3.5ZM19.267 2.5a.75.75 0 1 0-1.118 1 8.22 8.22 0 0 1 1.987 4.124.75.75 0 0 0 1.48-.248A9.72 9.72 0 0 0 19.266 2.5Z"
+          />
+          <path
+            fill-rule="evenodd"
+            d="M12 2.25A6.75 6.75 0 0 0 5.25 9v.75a8.217 8.217 0 0 1-2.119 5.52.75.75 0 0 0 .298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 1 0 7.48 0 24.583 24.583 0 0 0 4.83-1.244.75.75 0 0 0 .298-1.205 8.217 8.217 0 0 1-2.118-5.52V9A6.75 6.75 0 0 0 12 2.25ZM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 0 0 4.496 0l.002.1a2.25 2.25 0 1 1-4.5 0Z"
+            clip-rule="evenodd"
+          />
         </svg>
       </div>
       <div>
         <div class="text-md font-bold text-blue-500">Berhasil!</div>
-        <p class="text-sm text-gray-700 dark:text-gray-300">Konfigurasi berhasil disalin</p>
+        <p class="text-sm text-neutral-800">Akun berhasil disalin</p>
       </div>
     </div>
-    
-    <!-- Layout Utama -->
-    <div class="flex min-h-screen">
-      <!-- Country Selector - Panel Pemilih Negara -->
-      <aside class="hidden md:block w-16 border-r border-gray-200 dark:border-gray-700 bg-card shrink-0 z-20">
-        <div class="h-screen py-2 overflow-y-auto scrollbar-hide">
-          <div class="flex flex-col items-center gap-1">
-            PLACEHOLDER_BENDERA_NEGARA
-          </div>
+    <!-- Select Country -->
+    <div>
+      <div
+        class="h-full fixed top-0 w-14 bg-white dark:bg-neutral-800 border-r-2 border-neutral-800 dark:border-white z-20 overflow-y-scroll scrollbar-hide"
+      >
+        <div class="text-2xl flex flex-col items-center h-full gap-2">
+          PLACEHOLDER_BENDERA_NEGARA
         </div>
-      </aside>
-      
-      <!-- Konten Utama -->
-      <main class="flex-1">
-        <!-- Header Info -->
-        <header class="bg-amber-400 dark:bg-amber-600 border-b border-gray-200 dark:border-gray-700 px-5 py-1">
-          <div class="flex justify-end gap-3 text-sm">
-            <p id="container-info-ip">IP: 127.0.0.1</p>
-            <p id="container-info-country">Negara: Indonesia</p>
-            <p id="container-info-isp">ISP: Localhost</p>
-          </div>
-        </header>
-        
-        <!-- Judul -->
-        <div class="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 z-10 py-6 w-full">
-          <h1 class="text-xl text-center font-medium">
-            PLACEHOLDER_JUDUL
-          </h1>
+      </div>
+    </div>
+    <!-- Main -->
+    <div id="container-header">
+      <div id="container-info" class="bg-amber-400 border-2 border-neutral-800 text-right px-5">
+        <div class="flex justify-end gap-3 text-sm">
+          <p id="container-info-ip">IP: 127.0.0.1</p>
+          <p id="container-info-country">Country: Indonesia</p>
+          <p id="container-info-isp">ISP: Localhost</p>
         </div>
-        
-        <!-- Grid Koneksi -->
-        <div class="container mx-auto px-4 pt-10">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            PLACEHOLDER_PROXY_GROUP
-          </div>
-        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div
+        id="container-title"
+        class="sticky bg-white dark:bg-neutral-800 border-b-2 border-neutral-800 dark:border-white z-10 py-6 w-screen"
+      >
+        <h1 class="text-xl text-center text-neutral-800 dark:text-white">
+          PLACEHOLDER_JUDUL
+        </h1>
+      </div>
+      <div class="flex gap-6 pt-10 w-screen justify-center">
+        PLACEHOLDER_PROXY_GROUP
+      </div>
 
-        <!-- Pagination -->
-        <nav id="container-pagination" class="w-full mt-8 sticky bottom-0 right-0 left-0 transition -translate-y-6 z-20">
-          <ul class="flex justify-center space-x-4">
-            PLACEHOLDER_PAGE_BUTTON
-          </ul>
-        </nav>
-      </main>
+      <!-- Pagination -->
+      <nav id="container-pagination" class="w-screen mt-8 sticky bottom-0 right-0 left-0 transition -translate-y-6 z-20">
+        <ul class="flex justify-center space-x-4">
+          PLACEHOLDER_PAGE_BUTTON
+        </ul>
+      </nav>
     </div>
 
     <div id="container-window" class="hidden">
       <!-- Windows -->
       <!-- Informations -->
-      <div class="fixed z-20 top-0 w-full h-full bg-white dark:bg-gray-900">
+      <div class="fixed z-20 top-0 w-full h-full bg-white dark:bg-neutral-800">
         <p id="container-window-info" class="text-center w-full h-full top-1/4 absolute dark:text-white"></p>
       </div>
       <!-- Output Format -->
@@ -1176,19 +1178,19 @@ let baseHTML = `
             <div class="flex w-full h-full gap-1 justify-between">
               <button
                 onclick="copyToClipboardAsTarget('clash')"
-                class="basis-1/2 p-2 rounded-md bg-amber-400 dark:bg-amber-600 flex justify-center items-center"
+                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
               >
                 Clash
               </button>
               <button
                 onclick="copyToClipboardAsTarget('sfa')"
-                class="basis-1/2 p-2 rounded-md bg-amber-400 dark:bg-amber-600 flex justify-center items-center"
+                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
               >
                 SFA
               </button>
               <button
                 onclick="copyToClipboardAsTarget('bfr')"
-                class="basis-1/2 p-2 rounded-md bg-amber-400 dark:bg-amber-600 flex justify-center items-center"
+                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
               >
                 BFR
               </button>
@@ -1198,13 +1200,13 @@ let baseHTML = `
             <div class="flex w-full h-full gap-1 justify-between">
               <button
                 onclick="copyToClipboardAsTarget('v2ray')"
-                class="basis-1/2 p-2 rounded-md bg-amber-400 dark:bg-amber-600 flex justify-center items-center"
+                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
               >
                 V2Ray/Xray
               </button>
               <button
                 onclick="copyToClipboardAsRaw()"
-                class="basis-1/2 p-2 rounded-md bg-amber-400 dark:bg-amber-600 flex justify-center items-center"
+                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
               >
                 Raw
               </button>
@@ -1214,9 +1216,9 @@ let baseHTML = `
             <div class="flex w-full h-full gap-1 justify-center">
               <button
                 onclick="toggleOutputWindow()"
-                class="basis-1/2 border border-indigo-400 hover:bg-indigo-400 dark:text-white p-2 rounded-md flex justify-center items-center"
+                class="basis-1/2 border-2 border-indigo-400 hover:bg-indigo-400 dark:text-white p-2 rounded-full flex justify-center items-center"
               >
-                Tutup
+                Close
               </button>
             </div>
           </div>
@@ -1230,14 +1232,14 @@ let baseHTML = `
               <input
                 id="new-domain-input"
                 type="text"
-                placeholder="Masukkan wildcard"
-                class="basis-11/12 w-full h-full px-6 rounded-md focus:outline-none border border-gray-300 dark:border-gray-700 dark:bg-gray-800"
+                placeholder="Input wildcard"
+                class="basis-11/12 w-full h-full px-6 rounded-md focus:outline-0"
               />
               <button
                 onclick="registerDomain()"
-                class="p-2 rounded-md bg-amber-400 dark:bg-amber-600 flex justify-center items-center"
+                class="p-2 rounded-full bg-amber-400 flex justify-center items-center"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                   <path
                     fill-rule="evenodd"
                     d="M16.72 7.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 1 1-1.06-1.06l2.47-2.47H3a.75.75 0 0 1 0-1.5h16.19l-2.47-2.47a.75.75 0 0 1 0-1.06Z"
@@ -1260,8 +1262,8 @@ let baseHTML = `
     <footer>
       <div class="fixed bottom-3 right-3 flex flex-col gap-1 z-50">
         <a href="${DONATE_LINK}" target="_blank">
-          <button class="bg-green-500 rounded-full border border-gray-700 p-1 block">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+          <button class="bg-green-500 rounded-full border-2 border-neutral-800 p-1 block">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
               <path
                 d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 0 1-.921.42Z"
               />
@@ -1273,14 +1275,14 @@ let baseHTML = `
             </svg>
           </button>
         </a>
-        <button onclick="toggleWildcardsWindow()" class="bg-indigo-400 dark:bg-indigo-600 rounded-full border border-gray-700 p-1 PLACEHOLDER_API_READY">
+        <button onclick="toggleWildcardsWindow()" class="bg-indigo-400 rounded-full border-2 border-neutral-800 p-1 PLACEHOLDER_API_READY">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-6 h-6"
+            class="size-6"
           >
             <path
               stroke-linecap="round"
@@ -1289,33 +1291,19 @@ let baseHTML = `
             />
           </svg>
         </button>
-        <button onclick="toggleDarkMode()" class="bg-amber-400 dark:bg-amber-600 rounded-full border border-gray-700 p-1">
+        <button onclick="toggleDarkMode()" class="bg-amber-400 rounded-full border-2 border-neutral-800 p-1">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-6 h-6 block dark:hidden"
+            class="size-6"
           >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
               d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
-            ></path>
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6 hidden dark:block"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
             ></path>
           </svg>
         </button>
@@ -1331,42 +1319,18 @@ let baseHTML = `
       const converterUrl =
         "https://script.google.com/macros/s/AKfycbwwVeHNUlnP92syOP82p1dOk_-xwBgRIxkTjLhxxZ5UXicrGOEVNc5JaSOu0Bgsx_gG/exec";
 
+
       // Switches
       let isDomainListFetched = false;
 
       // Local variable
       let rawConfig = "";
 
-      // Fungsi untuk menentukan status ping
-      function getPingStatus(pingStr) {
-        const pingValue = Number.parseInt(pingStr.split(" ")[0], 10);
-
-        if (pingValue < 200) {
-          return {
-            color: "text-green-500",
-            bgColor: "bg-green-500",
-            label: "Cepat",
-          };
-        } else if (pingValue < 400) {
-          return {
-            color: "text-yellow-500",
-            bgColor: "bg-yellow-500",
-            label: "Sedang",
-          };
-        } else {
-          return {
-            color: "text-red-500",
-            bgColor: "bg-red-500",
-            label: "Lambat",
-          };
-        }
-      }
-
       function getDomainList() {
         if (isDomainListFetched) return;
         isDomainListFetched = true;
 
-        windowInfoContainer.innerText = "Mengambil data...";
+        windowInfoContainer.innerText = "Fetching data...";
 
         const url = "https://" + rootDomain + "/api/v1/domains/get";
         const res = fetch(url).then(async (res) => {
@@ -1374,16 +1338,16 @@ let baseHTML = `
           domainListContainer.innerHTML = "";
 
           if (res.status == 200) {
-            windowInfoContainer.innerText = "Selesai!";
+            windowInfoContainer.innerText = "Done!";
             const respJson = await res.json();
             for (const domain of respJson) {
               const domainElement = document.createElement("p");
-              domainElement.classList.add("w-full", "bg-amber-400", "dark:bg-amber-600", "rounded-md", "p-2", "mb-1");
+              domainElement.classList.add("w-full", "bg-amber-400", "rounded-md");
               domainElement.innerText = domain;
               domainListContainer.appendChild(domainElement);
             }
           } else {
-            windowInfoContainer.innerText = "Gagal!";
+            windowInfoContainer.innerText = "Failed!";
           }
         });
       }
@@ -1394,22 +1358,22 @@ let baseHTML = `
         const domain = domainInputElement.value + "." + rootDomain;
 
         if (!rawDomain.match(/\\w+\\.\\w+$/) || rawDomain.endsWith(rootDomain)) {
-          windowInfoContainer.innerText = "URL tidak valid!";
+          windowInfoContainer.innerText = "Invalid URL!";
           return;
         }
 
-        windowInfoContainer.innerText = "Mengirim permintaan...";
+        windowInfoContainer.innerText = "Pushing request...";
 
         const url = "https://" + rootDomain + "/api/v1/domains/put?domain=" + domain;
         const res = fetch(url).then((res) => {
           if (res.status == 200) {
-            windowInfoContainer.innerText = "Selesai!";
+            windowInfoContainer.innerText = "Done!";
             domainInputElement.value = "";
             isDomainListFetched = false;
             getDomainList();
           } else {
             if (res.status == 409) {
-              windowInfoContainer.innerText = "Domain sudah ada!";
+              windowInfoContainer.innerText = "Domain exists!";
             } else {
               windowInfoContainer.innerText = "Error " + res.status;
             }
@@ -1432,7 +1396,7 @@ let baseHTML = `
       }
 
       async function copyToClipboardAsTarget(target) {
-        windowInfoContainer.innerText = "Membuat konfigurasi...";
+        windowInfoContainer.innerText = "Generating config...";
         const url = "${CONVERTER_URL}";
         const res = await fetch(url, {
           method: "POST",
@@ -1444,7 +1408,7 @@ let baseHTML = `
         });
 
         if (res.status == 200) {
-          windowInfoContainer.innerText = "Selesai!";
+          windowInfoContainer.innerText = "Done!";
           navigator.clipboard.writeText(await res.text());
 
           notification.classList.remove("opacity-0");
@@ -1461,7 +1425,7 @@ let baseHTML = `
       }
 
       function toggleOutputWindow() {
-        windowInfoContainer.innerText = "Pilih format output:";
+        windowInfoContainer.innerText = "Select output:";
         toggleWindow();
         const rootElement = document.getElementById("output-window");
         if (rootElement.classList.contains("hidden")) {
@@ -1472,7 +1436,7 @@ let baseHTML = `
       }
 
       function toggleWildcardsWindow() {
-        windowInfoContainer.innerText = "Daftar domain";
+        windowInfoContainer.innerText = "Domain list";
         toggleWindow();
         getDomainList();
         const rootElement = document.getElementById("wildcards-window");
@@ -1492,68 +1456,72 @@ let baseHTML = `
       }
 
       function toggleDarkMode() {
-        const rootElement = document.documentElement;
+        const rootElement = document.getElementById("html");
         if (rootElement.classList.contains("dark")) {
           rootElement.classList.remove("dark");
-          localStorage.theme = 'light';
         } else {
           rootElement.classList.add("dark");
-          localStorage.theme = 'dark';
         }
       }
 
       function checkProxy() {
-  for (let i = 0; ; i++) {
-    const pingElement = document.getElementById("ping-"+i);
-    if (pingElement == undefined) return;
+        for (let i = 0; ; i++) {
+          const pingElement = document.getElementById("ping-"+i);
+          if (pingElement == undefined) return;
 
-    const target = pingElement.textContent.split(" ").filter((ipPort) => ipPort.match(":"))[0];
-    if (target) {
-      pingElement.textContent = "Memeriksa...";
-    } else {
-      continue;
-    }
+          const target = pingElement.textContent.split(" ").filter((ipPort) => ipPort.match(":"))[0];
+          if (target) {
+            pingElement.textContent = "Checking...";
+          } else {
+            continue;
+          }
 
-    let isActive = false;
-    new Promise(async (resolve) => {
-      const res = await fetch("https://${serviceName}.${rootDomain}/check?target=" + target)
-        .then(async (res) => {
-          if (isActive) return;
-          if (res.status == 200) {
-            const jsonResp = await res.json();
-            if (jsonResp.proxyip === true) {
-              isActive = true;
-              pingElement.textContent = "Aktif " + jsonResp.delay + " ms " + "(" + jsonResp.colo + ")";
-              
-              // Tentukan status ping
-              const pingStatus = getPingStatus(jsonResp.delay + " ms");
-              pingElement.className = pingStatus.color;
-              
-              // Perbarui indikator warna - PERBAIKAN DI SINI
-              const pingIndicator = document.getElementById("ping-indicator-"+i);
-              if (pingIndicator) {
-                pingIndicator.className = "h-2 w-2 rounded-full " + pingStatus.bgColor;
-              }
-            } else {
-              pingElement.textContent = "Tidak aktif";
-              pingElement.className = "text-red-600";
-              
-              const pingIndicator = document.getElementById("ping-indicator-"+i);
-              if (pingIndicator) {
-                pingIndicator.className = "h-2 w-2 rounded-full bg-red-600";
+          let isActive = false;
+          new Promise(async (resolve) => {
+            const res = await fetch("https://${serviceName}.${rootDomain}/check?target=" + target)
+              .then(async (res) => {
+                if (isActive) return;
+                if (res.status == 200) {
+                  pingElement.classList.remove("dark:text-white");
+                  const jsonResp = await res.json();
+                  if (jsonResp.proxyip === true) {
+                    isActive = true;
+                    pingElement.textContent = "Active " + jsonResp.delay + " ms " + "(" + jsonResp.colo + ")";
+                    pingElement.classList.add("text-green-600");
+                  } else {
+                    pingElement.textContent = "Inactive";
+                    pingElement.classList.add("text-red-600");
+                  }
+                } else {
+                  pingElement.textContent = "Check Failed!";
+                }
+              })
+              .finally(() => {
+                resolve(0);
+              });
+          });
+        }
+      }
+
+      function checkRegion() {
+        for (let i = 0; ; i++) {
+          console.log("Halo " + i)
+          const containerRegionCheck = document.getElementById("container-region-check-" + i);
+          const configSample = document.getElementById("config-sample-" + i).value.replaceAll(" ", "");
+          if (containerRegionCheck == undefined) break;
+
+          const res = fetch(
+            "https://api.foolvpn.me/regioncheck?config=" + encodeURIComponent(configSample)
+          ).then(async (res) => {
+            if (res.status == 200) {
+              containerRegionCheck.innerHTML = "<hr>";
+              for (const result of await res.json()) {
+                containerRegionCheck.innerHTML += "<p>" + result.name + ": " + result.region + "</p>";
               }
             }
-          } else {
-            pingElement.textContent = "Gagal memeriksa!";
-            pingElement.className = "text-gray-500 dark:text-gray-400";
-          }
-        })
-        .finally(() => {
-          resolve(0);
-        });
-    });
-  }
-}
+          });
+        }
+      }
 
       function checkGeoip() {
         const containerIP = document.getElementById("container-info-ip");
@@ -1563,22 +1531,16 @@ let baseHTML = `
           if (res.status == 200) {
             const respJson = await res.json();
             containerIP.innerText = "IP: " + respJson.ip;
-            containerCountry.innerText = "Negara: " + respJson.country;
+            containerCountry.innerText = "Country: " + respJson.country;
             containerISP.innerText = "ISP: " + respJson.asOrganization;
           }
         });
       }
 
-      // Set tema awal berdasarkan preferensi sistem
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-
       window.onload = () => {
         checkGeoip();
         checkProxy();
+        // checkRegion();
 
         const observer = lozad(".lozad", {
           load: function (el) {
@@ -1598,7 +1560,8 @@ let baseHTML = `
         }
       };
     </script>
-  </body>
+    </body>
+
 </html>
 `;
 
