@@ -1503,57 +1503,57 @@ let baseHTML = `
       }
 
       function checkProxy() {
-        for (let i = 0; ; i++) {
-          const pingElement = document.getElementById("ping-"+i);
-          if (pingElement == undefined) return;
+  for (let i = 0; ; i++) {
+    const pingElement = document.getElementById("ping-"+i);
+    if (pingElement == undefined) return;
 
-          const target = pingElement.textContent.split(" ").filter((ipPort) => ipPort.match(":"))[0];
-          if (target) {
-            pingElement.textContent = "Memeriksa...";
+    const target = pingElement.textContent.split(" ").filter((ipPort) => ipPort.match(":"))[0];
+    if (target) {
+      pingElement.textContent = "Memeriksa...";
+    } else {
+      continue;
+    }
+
+    let isActive = false;
+    new Promise(async (resolve) => {
+      const res = await fetch("https://${serviceName}.${rootDomain}/check?target=" + target)
+        .then(async (res) => {
+          if (isActive) return;
+          if (res.status == 200) {
+            const jsonResp = await res.json();
+            if (jsonResp.proxyip === true) {
+              isActive = true;
+              pingElement.textContent = "Aktif " + jsonResp.delay + " ms " + "(" + jsonResp.colo + ")";
+              
+              // Tentukan status ping
+              const pingStatus = getPingStatus(jsonResp.delay + " ms");
+              pingElement.className = pingStatus.color;
+              
+              // Perbarui indikator warna - PERBAIKAN DI SINI
+              const pingIndicator = document.getElementById("ping-indicator-"+i);
+              if (pingIndicator) {
+                pingIndicator.className = "h-2 w-2 rounded-full " + pingStatus.bgColor;
+              }
+            } else {
+              pingElement.textContent = "Tidak aktif";
+              pingElement.className = "text-red-600";
+              
+              const pingIndicator = document.getElementById("ping-indicator-"+i);
+              if (pingIndicator) {
+                pingIndicator.className = "h-2 w-2 rounded-full bg-red-600";
+              }
+            }
           } else {
-            continue;
+            pingElement.textContent = "Gagal memeriksa!";
+            pingElement.className = "text-gray-500 dark:text-gray-400";
           }
-
-          let isActive = false;
-          new Promise(async (resolve) => {
-            const res = await fetch("https://${serviceName}.${rootDomain}/check?target=" + target)
-              .then(async (res) => {
-                if (isActive) return;
-                if (res.status == 200) {
-                  const jsonResp = await res.json();
-                  if (jsonResp.proxyip === true) {
-                    isActive = true;
-                    pingElement.textContent = "Aktif " + jsonResp.delay + " ms " + "(" + jsonResp.colo + ")";
-                    
-                    // Tentukan status ping
-                    const pingStatus = getPingStatus(jsonResp.delay + " ms");
-                    pingElement.className = pingStatus.color;
-                    
-                    // Perbarui indikator warna
-                    const pingIndicator = document.getElementById("ping-indicator-"+i);
-                    if (pingIndicator) {
-                      pingIndicator.className = `h-2 w-2 rounded-full ${pingStatus.bgColor}`;
-                    }
-                  } else {
-                    pingElement.textContent = "Tidak aktif";
-                    pingElement.className = "text-red-600";
-                    
-                    const pingIndicator = document.getElementById("ping-indicator-"+i);
-                    if (pingIndicator) {
-                      pingIndicator.className = "h-2 w-2 rounded-full bg-red-600";
-                    }
-                  }
-                } else {
-                  pingElement.textContent = "Gagal memeriksa!";
-                  pingElement.className = "text-gray-500 dark:text-gray-400";
-                }
-              })
-              .finally(() => {
-                resolve(0);
-              });
-          });
-        }
-      }
+        })
+        .finally(() => {
+          resolve(0);
+        });
+    });
+  }
+}
 
       function checkGeoip() {
         const containerIP = document.getElementById("container-info-ip");
