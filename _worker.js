@@ -1284,6 +1284,29 @@ let baseHTML = `
             </div>
           </div>
           
+          <!-- Output Result -->
+          <div id="result-window" class="hidden">
+            <div class="mt-4">
+              <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg max-h-60 overflow-y-auto">
+                <pre id="result-content" class="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap break-all"></pre>
+              </div>
+              <div class="grid grid-cols-2 gap-3 mt-4">
+                <button
+                  onclick="copyToClipboardResult()"
+                  class="btn-rose bg-primary text-white px-4 py-2 rounded-lg flex justify-center items-center font-medium hover:bg-primary-dark"
+                >
+                  Salin
+                </button>
+                <button
+                  onclick="toggleResultWindow()"
+                  class="btn-rose border-2 border-primary text-primary hover:bg-primary hover:text-white px-4 py-2 rounded-lg flex justify-center items-center font-medium transition-colors"
+                >
+                  Tutup
+                </button>
+              </div>
+            </div>
+          </div>
+          
           <!-- Wildcards -->
           <div id="wildcards-window" class="hidden">
             <div class="mb-4 flex items-center gap-2">
@@ -1392,6 +1415,7 @@ let baseHTML = `
 
       // Local variable
       let rawConfig = "";
+      let resultConfig = "";
 
       function getDomainList() {
         if (isDomainListFetched) return;
@@ -1453,13 +1477,18 @@ let baseHTML = `
         rawConfig = text;
       }
 
-      function copyToClipboardAsRaw() {
-        navigator.clipboard.writeText(rawConfig);
+      function copyToClipboardResult() {
+        navigator.clipboard.writeText(resultConfig);
 
         notification.classList.remove("opacity-0");
         setTimeout(() => {
           notification.classList.add("opacity-0");
         }, 2000);
+      }
+
+      function copyToClipboardAsRaw() {
+        resultConfig = rawConfig;
+        showResultWindow(rawConfig);
       }
 
       async function copyToClipboardAsTarget(target) {
@@ -1475,16 +1504,29 @@ let baseHTML = `
         });
 
         if (res.status == 200) {
-          windowInfoContainer.innerText = "Selesai!";
-          navigator.clipboard.writeText(await res.text());
-
-          notification.classList.remove("opacity-0");
-          setTimeout(() => {
-            notification.classList.add("opacity-0");
-          }, 2000);
+          windowInfoContainer.innerText = "Konfigurasi Siap";
+          const result = await res.text();
+          resultConfig = result;
+          showResultWindow(result);
         } else {
           windowInfoContainer.innerText = "Error " + res.statusText;
         }
+      }
+
+      function showResultWindow(content) {
+        const outputWindow = document.getElementById("output-window");
+        const resultWindow = document.getElementById("result-window");
+        const resultContent = document.getElementById("result-content");
+        
+        outputWindow.classList.add("hidden");
+        resultWindow.classList.remove("hidden");
+        resultContent.textContent = content;
+      }
+
+      function toggleResultWindow() {
+        const resultWindow = document.getElementById("result-window");
+        resultWindow.classList.add("hidden");
+        toggleWindow();
       }
 
       function navigateTo(link) {
@@ -1496,8 +1538,10 @@ let baseHTML = `
         toggleWindow();
         
         const outputWindow = document.getElementById("output-window");
+        const resultWindow = document.getElementById("result-window");
         const wildcardsWindow = document.getElementById("wildcards-window");
         
+        resultWindow.classList.add("hidden");
         wildcardsWindow.classList.add("hidden");
         
         if (outputWindow.classList.contains("hidden")) {
@@ -1513,9 +1557,11 @@ let baseHTML = `
         getDomainList();
         
         const outputWindow = document.getElementById("output-window");
+        const resultWindow = document.getElementById("result-window");
         const wildcardsWindow = document.getElementById("wildcards-window");
         
         outputWindow.classList.add("hidden");
+        resultWindow.classList.add("hidden");
         
         if (wildcardsWindow.classList.contains("hidden")) {
           wildcardsWindow.classList.remove("hidden");
