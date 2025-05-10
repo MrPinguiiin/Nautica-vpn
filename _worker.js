@@ -1082,6 +1082,7 @@ let baseHTML = `
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Proxy List</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
       /* For Webkit-based browsers (Chrome, Safari and Opera) */
       .scrollbar-hide::-webkit-scrollbar {
@@ -1093,22 +1094,63 @@ let baseHTML = `
           -ms-overflow-style: none;  /* IE and Edge */
           scrollbar-width: none;  /* Firefox */
       }
+      
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      
+      .glass-effect {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      
+      .proxy-card {
+        transition: all 0.3s ease;
+      }
+      
+      .proxy-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(244, 63, 94, 0.3);
+      }
+      
+      .btn-rose {
+        transition: all 0.2s ease;
+      }
+      
+      .btn-rose:hover {
+        transform: scale(1.05);
+      }
+      
+      .btn-rose:active {
+        transform: scale(0.95);
+      }
     </style>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
     <script>
       tailwind.config = {
         darkMode: 'selector',
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                light: '#fda4af',
+                DEFAULT: '#f43f5e',
+                dark: '#be123c'
+              }
+            }
+          }
+        }
       }
     </script>
   </head>
-  <body class="bg-white dark:bg-neutral-800 bg-fixed">
+  <body class="bg-gray-50 dark:bg-gray-900 bg-fixed min-h-screen">
     <!-- Notification -->
     <div
       id="notification-badge"
-      class="fixed z-50 opacity-0 transition-opacity ease-in-out duration-300 mt-9 mr-6 right-0 p-3 max-w-sm bg-white rounded-xl border border-2 border-neutral-800 flex items-center gap-x-4"
+      class="fixed z-50 opacity-0 transition-opacity ease-in-out duration-300 mt-4 mr-4 right-0 p-4 max-w-sm bg-white dark:bg-gray-800 rounded-xl shadow-lg border-l-4 border-primary flex items-center gap-x-4"
     >
-      <div class="shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#171717" class="size-6">
+      <div class="shrink-0 text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
           <path
             d="M5.85 3.5a.75.75 0 0 0-1.117-1 9.719 9.719 0 0 0-2.348 4.876.75.75 0 0 0 1.479.248A8.219 8.219 0 0 1 5.85 3.5ZM19.267 2.5a.75.75 0 1 0-1.118 1 8.22 8.22 0 0 1 1.987 4.124.75.75 0 0 0 1.48-.248A9.72 9.72 0 0 0 19.266 2.5Z"
           />
@@ -1120,124 +1162,140 @@ let baseHTML = `
         </svg>
       </div>
       <div>
-        <div class="text-md font-bold text-blue-500">Berhasil!</div>
-        <p class="text-sm text-neutral-800">Akun berhasil disalin</p>
+        <div class="text-md font-bold text-primary">Berhasil!</div>
+        <p class="text-sm text-gray-800 dark:text-gray-200">Akun berhasil disalin</p>
       </div>
     </div>
+    
     <!-- Select Country -->
     <div>
       <div
-        class="h-full fixed top-0 w-14 bg-white dark:bg-neutral-800 border-r-2 border-neutral-800 dark:border-white z-20 overflow-y-scroll scrollbar-hide"
+        class="h-full fixed top-0 w-16 bg-white dark:bg-gray-800 shadow-lg z-20 overflow-y-auto scrollbar-hide"
       >
-        <div class="text-2xl flex flex-col items-center h-full gap-2">
+        <div class="text-2xl flex flex-col items-center h-full gap-3 py-4">
           PLACEHOLDER_BENDERA_NEGARA
         </div>
       </div>
     </div>
-    <!-- Main -->
-    <div id="container-header">
-      <div id="container-info" class="bg-amber-400 border-2 border-neutral-800 text-right px-5">
-        <div class="flex justify-end gap-3 text-sm">
-          <p id="container-info-ip">IP: 127.0.0.1</p>
-          <p id="container-info-country">Country: Indonesia</p>
-          <p id="container-info-isp">ISP: Localhost</p>
+    
+    <!-- Main Content -->
+    <div class="pl-16 relative">
+      <!-- Header Info -->
+      <div id="container-header" class="sticky top-0 z-10">
+        <div id="container-info" class="bg-primary text-white py-2 px-6 shadow-md">
+          <div class="flex justify-end gap-4 text-sm">
+            <p id="container-info-ip" class="flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm0 3c.552 0 1 .448 1 1v1.586l2.707 2.707a1 1 0 1 1-1.414 1.414L10 9.414l-2.293 2.293a1 1 0 1 1-1.414-1.414L9 7.586V6a1 1 0 0 1 1-1Z" clip-rule="evenodd" />
+              </svg>
+              IP: 127.0.0.1
+            </p>
+            <p id="container-info-country" class="flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M10 1a6 6 0 0 0-4.687 9.746c.215.27.315.62.231.954l-1.2 5.55a1 1 0 0 0 1.32 1.144l4.084-1.55a1 1 0 0 1 .756.056l5.56 2.779a1 1 0 0 0 1.45-.89v-2.681a.75.75 0 0 0 0-1.5V9.647A6.002 6.002 0 0 0 10 1Zm3 8a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm-6 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm3-2a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z" clip-rule="evenodd" />
+              </svg>
+              Country: Indonesia
+            </p>
+            <p id="container-info-isp" class="flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path d="M14 6H6v8h8V6Z" />
+                <path fill-rule="evenodd" d="M9.25 3V1.75a.75.75 0 0 1 1.5 0V3h1.5V1.75a.75.75 0 0 1 1.5 0V3h.5A2.75 2.75 0 0 1 17 5.75v.5h1.25a.75.75 0 0 1 0 1.5H17v1.5h1.25a.75.75 0 0 1 0 1.5H17v1.5h1.25a.75.75 0 0 1 0 1.5H17v.5A2.75 2.75 0 0 1 14.25 17h-.5v1.25a.75.75 0 0 1-1.5 0V17h-1.5v1.25a.75.75 0 0 1-1.5 0V17h-1.5v1.25a.75.75 0 0 1-1.5 0V17h-.5A2.75 2.75 0 0 1 3 14.25v-.5H1.75a.75.75 0 0 1 0-1.5H3v-1.5H1.75a.75.75 0 0 1 0-1.5H3v-1.5H1.75a.75.75 0 0 1 0-1.5H3v-.5A2.75 2.75 0 0 1 5.75 3h.5V1.75a.75.75 0 0 1 1.5 0V3h1.5ZM4.5 5.75c0-.69.56-1.25 1.25-1.25h8.5c.69 0 1.25.56 1.25 1.25v8.5c0 .69-.56 1.25-1.25 1.25h-8.5c-.69 0-1.25-.56-1.25-1.25v-8.5Z" clip-rule="evenodd" />
+              </svg>
+              ISP: Localhost
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="container">
-      <div
-        id="container-title"
-        class="sticky bg-white dark:bg-neutral-800 border-b-2 border-neutral-800 dark:border-white z-10 py-6 w-screen"
-      >
-        <h1 class="text-xl text-center text-neutral-800 dark:text-white">
-          PLACEHOLDER_JUDUL
-        </h1>
-      </div>
-      <div class="flex gap-6 pt-10 w-screen justify-center">
-        PLACEHOLDER_PROXY_GROUP
-      </div>
+      
+      <div class="container mx-auto px-4 py-8">
+        <div
+          id="container-title"
+          class="mb-8 text-center"
+        >
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
+            PLACEHOLDER_JUDUL
+          </h1>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+          PLACEHOLDER_PROXY_GROUP
+        </div>
 
-      <!-- Pagination -->
-      <nav id="container-pagination" class="w-screen mt-8 sticky bottom-0 right-0 left-0 transition -translate-y-6 z-20">
-        <ul class="flex justify-center space-x-4">
-          PLACEHOLDER_PAGE_BUTTON
-        </ul>
-      </nav>
+        <!-- Pagination -->
+        <nav id="container-pagination" class="mt-12 mb-4 flex justify-center">
+          <ul class="flex space-x-2">
+            PLACEHOLDER_PAGE_BUTTON
+          </ul>
+        </nav>
+      </div>
     </div>
 
-    <div id="container-window" class="hidden">
-      <!-- Windows -->
+    <!-- Modal Windows -->
+    <div id="container-window" class="fixed inset-0 z-40 hidden">
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
+      
       <!-- Informations -->
-      <div class="fixed z-20 top-0 w-full h-full bg-white dark:bg-neutral-800">
-        <p id="container-window-info" class="text-center w-full h-full top-1/4 absolute dark:text-white"></p>
-      </div>
-      <!-- Output Format -->
-      <div id="output-window" class="fixed z-20 top-0 right-0 w-full h-full flex justify-center items-center hidden">
-        <div class="w-[75%] h-[30%] flex flex-col gap-1 p-1 text-center rounded-md">
-          <div class="basis-1/6 w-full h-full rounded-md">
-            <div class="flex w-full h-full gap-1 justify-between">
+      <div class="fixed z-50 inset-0 flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-6 relative">
+          <p id="container-window-info" class="text-center py-4 text-lg font-medium text-gray-800 dark:text-white"></p>
+          
+          <!-- Output Format -->
+          <div id="output-window" class="hidden">
+            <div class="grid grid-cols-2 gap-3 mt-4">
               <button
                 onclick="copyToClipboardAsTarget('clash')"
-                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
+                class="btn-rose bg-primary text-white px-4 py-2 rounded-lg flex justify-center items-center font-medium hover:bg-primary-dark"
               >
                 Clash
               </button>
               <button
                 onclick="copyToClipboardAsTarget('sfa')"
-                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
+                class="btn-rose bg-primary text-white px-4 py-2 rounded-lg flex justify-center items-center font-medium hover:bg-primary-dark"
               >
                 SFA
               </button>
               <button
                 onclick="copyToClipboardAsTarget('bfr')"
-                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
+                class="btn-rose bg-primary text-white px-4 py-2 rounded-lg flex justify-center items-center font-medium hover:bg-primary-dark"
               >
                 BFR
               </button>
-            </div>
-          </div>
-          <div class="basis-1/6 w-full h-full rounded-md">
-            <div class="flex w-full h-full gap-1 justify-between">
               <button
                 onclick="copyToClipboardAsTarget('v2ray')"
-                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
+                class="btn-rose bg-primary text-white px-4 py-2 rounded-lg flex justify-center items-center font-medium hover:bg-primary-dark"
               >
                 V2Ray/Xray
               </button>
               <button
                 onclick="copyToClipboardAsRaw()"
-                class="basis-1/2 p-2 rounded-full bg-amber-400 flex justify-center items-center"
+                class="btn-rose bg-primary text-white px-4 py-2 rounded-lg flex justify-center items-center font-medium hover:bg-primary-dark col-span-2"
               >
                 Raw
               </button>
             </div>
-          </div>
-          <div class="basis-1/6 w-full h-full rounded-md">
-            <div class="flex w-full h-full gap-1 justify-center">
+            <div class="mt-6 flex justify-center">
               <button
                 onclick="toggleOutputWindow()"
-                class="basis-1/2 border-2 border-indigo-400 hover:bg-indigo-400 dark:text-white p-2 rounded-full flex justify-center items-center"
+                class="btn-rose border-2 border-primary text-primary hover:bg-primary hover:text-white px-4 py-2 rounded-lg flex justify-center items-center font-medium transition-colors"
               >
-                Close
+                Tutup
               </button>
             </div>
           </div>
-        </div>
-      </div>
-      <!-- Wildcards -->
-      <div id="wildcards-window" class="fixed hidden z-20 top-0 right-0 w-full h-full flex justify-center items-center">
-        <div class="w-[75%] h-[30%] flex flex-col gap-1 p-1 text-center rounded-md">
-          <div class="basis-1/6 w-full h-full rounded-md">
-            <div class="flex w-full h-full gap-1 justify-between">
+          
+          <!-- Wildcards -->
+          <div id="wildcards-window" class="hidden">
+            <div class="mb-4 flex items-center gap-2">
               <input
                 id="new-domain-input"
                 type="text"
                 placeholder="Input wildcard"
-                class="basis-11/12 w-full h-full px-6 rounded-md focus:outline-0"
+                class="flex-1 w-full px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-gray-700 dark:bg-gray-700 focus:outline-none focus:border-primary dark:focus:border-primary dark:text-white"
               />
               <button
                 onclick="registerDomain()"
-                class="p-2 rounded-full bg-amber-400 flex justify-center items-center"
+                class="btn-rose bg-primary text-white p-2 rounded-lg flex justify-center items-center hover:bg-primary-dark"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                   <path
@@ -1248,21 +1306,30 @@ let baseHTML = `
                 </svg>
               </button>
             </div>
-          </div>
-          <div class="basis-5/6 w-full h-full rounded-md">
-            <div
-              id="container-domains"
-              class="w-full h-full rounded-md flex flex-col gap-1 overflow-scroll scrollbar-hide"
-            ></div>
+            <div class="mt-4 max-h-60 overflow-y-auto">
+              <div
+                id="container-domains"
+                class="grid gap-2"
+              ></div>
+            </div>
+            <div class="mt-6 flex justify-center">
+              <button
+                onclick="toggleWildcardsWindow()"
+                class="btn-rose border-2 border-primary text-primary hover:bg-primary hover:text-white px-4 py-2 rounded-lg flex justify-center items-center font-medium transition-colors"
+              >
+                Tutup
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Floating Action Buttons -->
     <footer>
-      <div class="fixed bottom-3 right-3 flex flex-col gap-1 z-50">
+      <div class="fixed bottom-4 right-4 flex flex-col gap-2 z-30">
         <a href="${DONATE_LINK}" target="_blank">
-          <button class="bg-green-500 rounded-full border-2 border-neutral-800 p-1 block">
+          <button class="btn-rose bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg p-3 transition-all">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
               <path
                 d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 0 1-.921.42Z"
@@ -1275,7 +1342,7 @@ let baseHTML = `
             </svg>
           </button>
         </a>
-        <button onclick="toggleWildcardsWindow()" class="bg-indigo-400 rounded-full border-2 border-neutral-800 p-1 PLACEHOLDER_API_READY">
+        <button onclick="toggleWildcardsWindow()" class="btn-rose bg-primary hover:bg-primary-dark text-white rounded-full shadow-lg p-3 transition-all PLACEHOLDER_API_READY">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -1291,7 +1358,7 @@ let baseHTML = `
             />
           </svg>
         </button>
-        <button onclick="toggleDarkMode()" class="bg-amber-400 rounded-full border-2 border-neutral-800 p-1">
+        <button onclick="toggleDarkMode()" class="btn-rose bg-primary hover:bg-primary-dark text-white rounded-full shadow-lg p-3 transition-all">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -1330,7 +1397,7 @@ let baseHTML = `
         if (isDomainListFetched) return;
         isDomainListFetched = true;
 
-        windowInfoContainer.innerText = "Fetching data...";
+        windowInfoContainer.innerText = "Mengambil data...";
 
         const url = "https://" + rootDomain + "/api/v1/domains/get";
         const res = fetch(url).then(async (res) => {
@@ -1338,16 +1405,16 @@ let baseHTML = `
           domainListContainer.innerHTML = "";
 
           if (res.status == 200) {
-            windowInfoContainer.innerText = "Done!";
+            windowInfoContainer.innerText = "Selesai!";
             const respJson = await res.json();
             for (const domain of respJson) {
-              const domainElement = document.createElement("p");
-              domainElement.classList.add("w-full", "bg-amber-400", "rounded-md");
+              const domainElement = document.createElement("div");
+              domainElement.classList.add("bg-primary", "bg-opacity-10", "text-primary", "rounded-lg", "p-2", "text-sm");
               domainElement.innerText = domain;
               domainListContainer.appendChild(domainElement);
             }
           } else {
-            windowInfoContainer.innerText = "Failed!";
+            windowInfoContainer.innerText = "Gagal!";
           }
         });
       }
@@ -1358,22 +1425,22 @@ let baseHTML = `
         const domain = domainInputElement.value + "." + rootDomain;
 
         if (!rawDomain.match(/\\w+\\.\\w+$/) || rawDomain.endsWith(rootDomain)) {
-          windowInfoContainer.innerText = "Invalid URL!";
+          windowInfoContainer.innerText = "URL tidak valid!";
           return;
         }
 
-        windowInfoContainer.innerText = "Pushing request...";
+        windowInfoContainer.innerText = "Mengirim permintaan...";
 
         const url = "https://" + rootDomain + "/api/v1/domains/put?domain=" + domain;
         const res = fetch(url).then((res) => {
           if (res.status == 200) {
-            windowInfoContainer.innerText = "Done!";
+            windowInfoContainer.innerText = "Selesai!";
             domainInputElement.value = "";
             isDomainListFetched = false;
             getDomainList();
           } else {
             if (res.status == 409) {
-              windowInfoContainer.innerText = "Domain exists!";
+              windowInfoContainer.innerText = "Domain sudah ada!";
             } else {
               windowInfoContainer.innerText = "Error " + res.status;
             }
@@ -1396,7 +1463,7 @@ let baseHTML = `
       }
 
       async function copyToClipboardAsTarget(target) {
-        windowInfoContainer.innerText = "Generating config...";
+        windowInfoContainer.innerText = "Membuat konfigurasi...";
         const url = "${CONVERTER_URL}";
         const res = await fetch(url, {
           method: "POST",
@@ -1408,7 +1475,7 @@ let baseHTML = `
         });
 
         if (res.status == 200) {
-          windowInfoContainer.innerText = "Done!";
+          windowInfoContainer.innerText = "Selesai!";
           navigator.clipboard.writeText(await res.text());
 
           notification.classList.remove("opacity-0");
@@ -1425,25 +1492,35 @@ let baseHTML = `
       }
 
       function toggleOutputWindow() {
-        windowInfoContainer.innerText = "Select output:";
+        windowInfoContainer.innerText = "Pilih format output:";
         toggleWindow();
-        const rootElement = document.getElementById("output-window");
-        if (rootElement.classList.contains("hidden")) {
-          rootElement.classList.remove("hidden");
+        
+        const outputWindow = document.getElementById("output-window");
+        const wildcardsWindow = document.getElementById("wildcards-window");
+        
+        wildcardsWindow.classList.add("hidden");
+        
+        if (outputWindow.classList.contains("hidden")) {
+          outputWindow.classList.remove("hidden");
         } else {
-          rootElement.classList.add("hidden");
+          outputWindow.classList.add("hidden");
         }
       }
 
       function toggleWildcardsWindow() {
-        windowInfoContainer.innerText = "Domain list";
+        windowInfoContainer.innerText = "Daftar domain";
         toggleWindow();
         getDomainList();
-        const rootElement = document.getElementById("wildcards-window");
-        if (rootElement.classList.contains("hidden")) {
-          rootElement.classList.remove("hidden");
+        
+        const outputWindow = document.getElementById("output-window");
+        const wildcardsWindow = document.getElementById("wildcards-window");
+        
+        outputWindow.classList.add("hidden");
+        
+        if (wildcardsWindow.classList.contains("hidden")) {
+          wildcardsWindow.classList.remove("hidden");
         } else {
-          rootElement.classList.add("hidden");
+          wildcardsWindow.classList.add("hidden");
         }
       }
 
@@ -1471,7 +1548,7 @@ let baseHTML = `
 
           const target = pingElement.textContent.split(" ").filter((ipPort) => ipPort.match(":"))[0];
           if (target) {
-            pingElement.textContent = "Checking...";
+            pingElement.textContent = "Memeriksa...";
           } else {
             continue;
           }
@@ -1486,14 +1563,14 @@ let baseHTML = `
                   const jsonResp = await res.json();
                   if (jsonResp.proxyip === true) {
                     isActive = true;
-                    pingElement.textContent = "Active " + jsonResp.delay + " ms " + "(" + jsonResp.colo + ")";
+                    pingElement.textContent = "Aktif " + jsonResp.delay + " ms " + "(" + jsonResp.colo + ")";
                     pingElement.classList.add("text-green-600");
                   } else {
-                    pingElement.textContent = "Inactive";
+                    pingElement.textContent = "Tidak Aktif";
                     pingElement.classList.add("text-red-600");
                   }
                 } else {
-                  pingElement.textContent = "Check Failed!";
+                  pingElement.textContent = "Gagal periksa!";
                 }
               })
               .finally(() => {
@@ -1505,7 +1582,6 @@ let baseHTML = `
 
       function checkRegion() {
         for (let i = 0; ; i++) {
-          console.log("Halo " + i)
           const containerRegionCheck = document.getElementById("container-region-check-" + i);
           const configSample = document.getElementById("config-sample-" + i).value.replaceAll(" ", "");
           if (containerRegionCheck == undefined) break;
@@ -1514,9 +1590,9 @@ let baseHTML = `
             "https://api.foolvpn.me/regioncheck?config=" + encodeURIComponent(configSample)
           ).then(async (res) => {
             if (res.status == 200) {
-              containerRegionCheck.innerHTML = "<hr>";
+              containerRegionCheck.innerHTML = "<hr class='my-2 border-gray-200 dark:border-gray-700'>";
               for (const result of await res.json()) {
-                containerRegionCheck.innerHTML += "<p>" + result.name + ": " + result.region + "</p>";
+                containerRegionCheck.innerHTML += "<p class='text-sm'>" + result.name + ": " + result.region + "</p>";
               }
             }
           });
@@ -1530,9 +1606,9 @@ let baseHTML = `
         const res = fetch("https://" + rootDomain + "/api/v1/myip").then(async (res) => {
           if (res.status == 200) {
             const respJson = await res.json();
-            containerIP.innerText = "IP: " + respJson.ip;
-            containerCountry.innerText = "Country: " + respJson.country;
-            containerISP.innerText = "ISP: " + respJson.asOrganization;
+            containerIP.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm0 3c.552 0 1 .448 1 1v1.586l2.707 2.707a1 1 0 1 1-1.414 1.414L10 9.414l-2.293 2.293a1 1 0 1 1-1.414-1.414L9 7.586V6a1 1 0 0 1 1-1Z" clip-rule="evenodd" /></svg> IP: ' + respJson.ip;
+            containerCountry.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M10 1a6 6 0 0 0-4.687 9.746c.215.27.315.62.231.954l-1.2 5.55a1 1 0 0 0 1.32 1.144l4.084-1.55a1 1 0 0 1 .756.056l5.56 2.779a1 1 0 0 0 1.45-.89v-2.681a.75.75 0 0 0 0-1.5V9.647A6.002 6.002 0 0 0 10 1Zm3 8a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm-6 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm3-2a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z" clip-rule="evenodd" /></svg> Country: ' + respJson.country;
+            containerISP.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M14 6H6v8h8V6Z" /><path fill-rule="evenodd" d="M9.25 3V1.75a.75.75 0 0 1 1.5 0V3h1.5V1.75a.75.75 0 0 1 1.5 0V3h.5A2.75 2.75 0 0 1 17 5.75v.5h1.25a.75.75 0 0 1 0 1.5H17v1.5h1.25a.75.75 0 0 1 0 1.5H17v1.5h1.25a.75.75 0 0 1 0 1.5H17v.5A2.75 2.75 0 0 1 14.25 17h-.5v1.25a.75.75 0 0 1-1.5 0V17h-1.5v1.25a.75.75 0 0 1-1.5 0V17h-1.5v1.25a.75.75 0 0 1-1.5 0V17h-.5A2.75 2.75 0 0 1 3 14.25v-.5H1.75a.75.75 0 0 1 0-1.5H3v-1.5H1.75a.75.75 0 0 1 0-1.5H3v-1.5H1.75a.75.75 0 0 1 0-1.5H3v-.5A2.75 2.75 0 0 1 5.75 3h.5V1.75a.75.75 0 0 1 1.5 0V3h1.5ZM4.5 5.75c0-.69.56-1.25 1.25-1.25h8.5c.69 0 1.25.56 1.25 1.25v8.5c0 .69-.56 1.25-1.25 1.25h-8.5c-.69 0-1.25-.56-1.25-1.25v-8.5Z" clip-rule="evenodd" /></svg> ISP: ' + respJson.asOrganization;
           }
         });
       }
@@ -1552,11 +1628,13 @@ let baseHTML = `
 
       window.onscroll = () => {
         const paginationContainer = document.getElementById("container-pagination");
-
-        if (window.innerHeight + Math.round(window.scrollY) >= document.body.offsetHeight) {
-          paginationContainer.classList.remove("-translate-y-6");
+        const headerContainer = document.getElementById("container-header");
+        
+        // Add shadow to header on scroll
+        if (window.scrollY > 0) {
+          headerContainer.classList.add("shadow-md");
         } else {
-          paginationContainer.classList.add("-translate-y-6");
+          headerContainer.classList.remove("shadow-md");
         }
       };
     </script>
@@ -1592,27 +1670,50 @@ class Document {
 
   buildProxyGroup() {
     let proxyGroupElement = "";
-    proxyGroupElement += `<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">`;
     for (let i = 0; i < this.proxies.length; i++) {
       const proxyData = this.proxies[i];
 
       // Assign proxies
-      proxyGroupElement += `<div class="lozad scale-95 mb-2 bg-white dark:bg-neutral-800 transition-transform duration-200 rounded-lg p-4 w-60 border-2 border-neutral-800">`;
-      proxyGroupElement += `  <div id="countryFlag" class="absolute -translate-y-9 -translate-x-2 border-2 border-neutral-800 rounded-full overflow-hidden"><img width="32" src="https://hatscripts.github.io/circle-flags/flags/${proxyData.country.toLowerCase()}.svg" /></div>`;
-      proxyGroupElement += `  <div>`;
-      proxyGroupElement += `    <div id="ping-${i}" class="animate-pulse text-xs font-semibold dark:text-white">Idle ${proxyData.proxyIP}:${proxyData.proxyPort}</div>`;
-      proxyGroupElement += `  </div>`;
-      proxyGroupElement += `  <div class="rounded py-1 px-2 bg-amber-400 dark:bg-neutral-800 dark:border-2 dark:border-amber-400">`;
-      proxyGroupElement += `    <h5 class="font-bold text-md text-neutral-900 dark:text-white mb-1 overflow-x-scroll scrollbar-hide text-nowrap">${proxyData.org}</h5>`;
-      proxyGroupElement += `    <div class="text-neutral-900 dark:text-white text-sm">`;
-      proxyGroupElement += `      <p>IP: ${proxyData.proxyIP}</p>`;
-      proxyGroupElement += `      <p>Port: ${proxyData.proxyPort}</p>`;
-      proxyGroupElement += `      <div id="container-region-check-${i}">`;
-      proxyGroupElement += `        <input id="config-sample-${i}" class="hidden" type="text" value="${proxyData.list[0]}">`;
+      proxyGroupElement += `<div class="proxy-card w-full max-w-sm bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">`;
+      
+      // Header with country flag
+      proxyGroupElement += `<div class="relative">`;
+      proxyGroupElement += `  <div class="bg-primary text-white px-4 py-3 flex justify-between items-center">`;
+      proxyGroupElement += `    <div class="flex items-center gap-2">`;
+      proxyGroupElement += `      <div class="rounded-full overflow-hidden border-2 border-white shadow-md">`;
+      proxyGroupElement += `        <img width="24" src="https://hatscripts.github.io/circle-flags/flags/${proxyData.country.toLowerCase()}.svg" />`;
       proxyGroupElement += `      </div>`;
+      proxyGroupElement += `      <span class="font-medium">${proxyData.country}</span>`;
+      proxyGroupElement += `    </div>`;
+      proxyGroupElement += `    <div id="ping-${i}" class="text-xs font-medium rounded-full px-2 py-1 bg-white bg-opacity-20">Memeriksa...</div>`;
+      proxyGroupElement += `  </div>`;
+      proxyGroupElement += `</div>`;
+      
+      // Body
+      proxyGroupElement += `<div class="p-4">`;
+      // Organization
+      proxyGroupElement += `  <h5 class="font-bold text-gray-800 dark:text-white mb-3 truncate" title="${proxyData.org}">${proxyData.org}</h5>`;
+      
+      // Info
+      proxyGroupElement += `  <div class="text-gray-600 dark:text-gray-300 text-sm space-y-1 mb-4">`;
+      proxyGroupElement += `    <p class="flex items-center gap-1.5">`;
+      proxyGroupElement += `      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 text-primary">`;
+      proxyGroupElement += `        <path fill-rule="evenodd" d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm0 3c.552 0 1 .448 1 1v1.586l2.707 2.707a1 1 0 1 1-1.414 1.414L10 9.414l-2.293 2.293a1 1 0 1 1-1.414-1.414L9 7.586V6a1 1 0 0 1 1-1Z" clip-rule="evenodd" />`;
+      proxyGroupElement += `      </svg>IP: ${proxyData.proxyIP}`;
+      proxyGroupElement += `    </p>`;
+      proxyGroupElement += `    <p class="flex items-center gap-1.5">`;
+      proxyGroupElement += `      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 text-primary">`;
+      proxyGroupElement += `        <path d="M3 4a2 2 0 0 0-2 2v1.161l8.441 4.221a1.25 1.25 0 0 0 1.118 0L19 7.162V6a2 2 0 0 0-2-2H3Z" />`;
+      proxyGroupElement += `        <path d="m19 8.839-7.441 3.721a2.75 2.75 0 0 1-2.118 0L1 8.839V14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839Z" />`;
+      proxyGroupElement += `      </svg>Port: ${proxyData.proxyPort}`;
+      proxyGroupElement += `    </p>`;
+      proxyGroupElement += `    <div id="container-region-check-${i}">`;
+      proxyGroupElement += `      <input id="config-sample-${i}" class="hidden" type="text" value="${proxyData.list[0]}">`;
       proxyGroupElement += `    </div>`;
       proxyGroupElement += `  </div>`;
-      proxyGroupElement += `  <div class="flex flex-col gap-2 mt-3 text-sm">`;
+      
+      // Protocol buttons
+      proxyGroupElement += `  <div class="grid grid-cols-2 gap-2">`;
       for (let x = 0; x < proxyData.list.length; x++) {
         const indexName = [
           `${reverse("NAJORT")} TLS`,
@@ -1624,20 +1725,12 @@ class Document {
         ];
         const proxy = proxyData.list[x];
 
-        if (x % 2 == 0) {
-          proxyGroupElement += `<div class="flex gap-2 justify-around w-full">`;
-        }
-
-        proxyGroupElement += `<button class="bg-blue-500 dark:bg-neutral-800 dark:border-2 dark:border-blue-500 rounded p-1 w-full text-white" onclick="copyToClipboard('${proxy}')">${indexName[x]}</button>`;
-
-        if (x % 2 == 1) {
-          proxyGroupElement += `</div>`;
-        }
+        proxyGroupElement += `<button class="btn-rose text-xs py-2 px-2 rounded-lg ${x < 3 ? 'bg-primary text-white hover:bg-primary-dark' : 'border border-primary text-primary hover:bg-primary hover:text-white'} transition-colors" onclick="copyToClipboard('${proxy}')">${indexName[x]}</button>`;
       }
       proxyGroupElement += `  </div>`;
       proxyGroupElement += `</div>`;
+      proxyGroupElement += `</div>`;
     }
-    proxyGroupElement += `</div>`;
 
     this.html = this.html.replaceAll("PLACEHOLDER_PROXY_GROUP", `${proxyGroupElement}`);
   }
@@ -1650,10 +1743,14 @@ class Document {
     }
 
     let flagElement = "";
+    flagElement += `<a href="/sub${proxyBankUrl ? "?proxy-list=" + proxyBankUrl : ""}" class="mb-4 w-10 h-10 flex items-center justify-center rounded-full bg-primary text-white font-bold shadow-md" title="Semua Negara">ALL</a>`;
+    
     for (const flag of new Set(flagList)) {
       flagElement += `<a href="/sub?cc=${flag}${
         proxyBankUrl ? "&proxy-list=" + proxyBankUrl : ""
-      }" class="py-1" ><img width=20 src="https://hatscripts.github.io/circle-flags/flags/${flag.toLowerCase()}.svg" /></a>`;
+      }" class="my-1 w-10 h-10 flex items-center justify-center rounded-full overflow-hidden border-2 border-transparent hover:border-primary transition-all hover:shadow-md" title="${flag}">
+        <img width="32" src="https://hatscripts.github.io/circle-flags/flags/${flag.toLowerCase()}.svg" />
+      </a>`;
     }
 
     this.html = this.html.replaceAll("PLACEHOLDER_BENDERA_NEGARA", flagElement);
@@ -1662,7 +1759,7 @@ class Document {
   addPageButton(text, link, isDisabled) {
     const pageButton = `<li><button ${
       isDisabled ? "disabled" : ""
-    } class="px-3 py-1 bg-amber-400 border-2 border-neutral-800 rounded" onclick=navigateTo('${link}')>${text}</button></li>`;
+    } class="px-4 py-2 ${isDisabled ? 'bg-gray-300 dark:bg-gray-700 cursor-not-allowed' : 'bg-primary hover:bg-primary-dark'} text-white font-medium rounded-lg transition-colors ${isDisabled ? 'opacity-50' : ''}" onclick=navigateTo('${link}')>${text}</button></li>`;
 
     this.html = this.html.replaceAll("PLACEHOLDER_PAGE_BUTTON", `${pageButton}\nPLACEHOLDER_PAGE_BUTTON`);
   }
