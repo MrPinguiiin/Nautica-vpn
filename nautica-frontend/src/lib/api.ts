@@ -1,10 +1,5 @@
-// API client untuk berkomunikasi dengan Cloudflare Workers
+const API_BASE_URL = '/api';
 
-const API_BASE_URL = '/api'; // Proxy ke Cloudflare Worker
-
-/**
- * Mendapatkan daftar proxy dari worker
- */
 export async function getProxyList() {
   try {
     const response = await fetch(`${API_BASE_URL}/sub/0`);
@@ -18,9 +13,6 @@ export async function getProxyList() {
   }
 }
 
-/**
- * Memeriksa kesehatan proxy
- */
 export async function checkProxyHealth(target: string) {
   try {
     const response = await fetch(`${API_BASE_URL}/check?target=${target}`);

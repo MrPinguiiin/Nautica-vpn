@@ -1,6 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { getProxyList } from '$lib/api';
+    import Button from '$lib/components/ui/button/button.svelte';
 
 let proxyListHtml = '';
 let loading = true;
@@ -25,6 +26,13 @@ onMount(async () => {
 
 <section class="container mx-auto p-4">
 	<h1 class="text-3xl font-bold mb-6">Welcome to Nautica x Badcode Serverless VPN</h1>
+
+	<Button 
+		variant="default"
+	>
+
+		Halo
+	</Button>
 	
 	{#if loading}
 		<div class="flex justify-center">

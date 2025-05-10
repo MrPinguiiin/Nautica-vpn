@@ -6,7 +6,7 @@ export default defineConfig({
 	server: {
 		proxy: {
 			'/api': {
-				target: 'https://nautica.badcode.biz.id', // Ganti dengan domain Cloudflare Workers Anda
+				target: 'https://nautica.badcode.biz.id',
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/api/, '')
 			}

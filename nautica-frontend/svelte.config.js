@@ -6,6 +6,7 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
+		// Alias akan menggunakan path bawaan SvelteKit
 		adapter: adapter()
 	}
 };
