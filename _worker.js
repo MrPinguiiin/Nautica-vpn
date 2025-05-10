@@ -1170,7 +1170,7 @@ let baseHTML = `
     <!-- Select Country -->
     <div>
       <div
-        class="h-full fixed top-0 w-16 bg-white dark:bg-gray-800 shadow-lg z-20 overflow-y-auto scrollbar-hide"
+        class="h-full fixed top-0 w-52 bg-white dark:bg-gray-800 shadow-lg z-20 overflow-y-auto scrollbar-hide"
       >
         <div class="text-2xl flex flex-col items-center h-full gap-3 py-4">
           PLACEHOLDER_BENDERA_NEGARA
@@ -1179,7 +1179,7 @@ let baseHTML = `
     </div>
     
     <!-- Main Content -->
-    <div class="pl-16 relative">
+    <div class="pl-52 relative">
       <!-- Header Info -->
       <div id="container-header" class="sticky top-0 z-10">
         <div id="container-info" class="bg-primary text-white py-2 px-6 shadow-md">
@@ -1287,7 +1287,7 @@ let baseHTML = `
           <!-- Output Result -->
           <div id="result-window" class="hidden">
             <div class="mt-4">
-              <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg max-h-60 overflow-y-auto">
+              <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg max-h-[300px] overflow-y-auto">
                 <pre id="result-content" class="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap break-all"></pre>
               </div>
               <div class="grid grid-cols-2 gap-3 mt-4">
@@ -1493,23 +1493,49 @@ let baseHTML = `
 
       async function copyToClipboardAsTarget(target) {
         windowInfoContainer.innerText = "Membuat konfigurasi...";
+        
+        // Jika menggunakan format v2ray, gunakan result berbeda (base64)
+        if (target === 'v2ray') {
+          try {
+            // Pastikan encoding bekerja dengan benar untuk format v2ray
+            const configList = rawConfig.split(',');
+            if (configList.length > 1) {
+              resultConfig = btoa(configList.join('\n'));
+            } else {
+              resultConfig = btoa(rawConfig);
+            }
+            windowInfoContainer.innerText = "Konfigurasi Siap";
+            showResultWindow(resultConfig);
+          } catch (error) {
+            console.error("Error encoding V2Ray config:", error);
+            windowInfoContainer.innerText = "Konfigurasi Siap";
+            showResultWindow(rawConfig); // Fallback to raw if encoding fails
+          }
+          return;
+        }
+        
         const url = "${CONVERTER_URL}";
-        const res = await fetch(url, {
-          method: "POST",
-          body: JSON.stringify({
-            url: rawConfig,
-            format: target,
-            template: "cf",
-          }),
-        });
+        try {
+          const res = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify({
+              url: rawConfig,
+              format: target,
+              template: "cf",
+            }),
+          });
 
-        if (res.status == 200) {
-          windowInfoContainer.innerText = "Konfigurasi Siap";
-          const result = await res.text();
-          resultConfig = result;
-          showResultWindow(result);
-        } else {
-          windowInfoContainer.innerText = "Error " + res.statusText;
+          if (res.status == 200) {
+            windowInfoContainer.innerText = "Konfigurasi Siap";
+            const result = await res.text();
+            resultConfig = result;
+            showResultWindow(result);
+          } else {
+            windowInfoContainer.innerText = "Error " + res.statusText;
+          }
+        } catch (error) {
+          windowInfoContainer.innerText = "Gagal membuat konfigurasi";
+          console.error(error);
         }
       }
 
@@ -1606,17 +1632,39 @@ let baseHTML = `
                 if (isActive) return;
                 if (res.status == 200) {
                   pingElement.classList.remove("dark:text-white");
+                  pingElement.classList.remove("bg-white");
+                  pingElement.classList.remove("bg-opacity-20");
+                  
                   const jsonResp = await res.json();
                   if (jsonResp.proxyip === true) {
                     isActive = true;
-                    pingElement.textContent = "Aktif " + jsonResp.delay + " ms " + "(" + jsonResp.colo + ")";
-                    pingElement.classList.add("text-green-600");
+                    const pingValue = parseInt(jsonResp.delay);
+                    
+                    // Warna berdasarkan nilai ping
+                    if (pingValue < 150) {
+                      // Ping rendah - hijau
+                      pingElement.classList.add("bg-green-500");
+                      pingElement.classList.add("text-white");
+                    } else if (pingValue < 300) {
+                      // Ping sedang - kuning
+                      pingElement.classList.add("bg-yellow-500");
+                      pingElement.classList.add("text-white");
+                    } else {
+                      // Ping tinggi - merah
+                      pingElement.classList.add("bg-red-500");
+                      pingElement.classList.add("text-white");
+                    }
+                    
+                    pingElement.textContent = pingValue + " ms";
                   } else {
                     pingElement.textContent = "Tidak Aktif";
-                    pingElement.classList.add("text-red-600");
+                    pingElement.classList.add("bg-red-500");
+                    pingElement.classList.add("text-white");
                   }
                 } else {
-                  pingElement.textContent = "Gagal periksa!";
+                  pingElement.textContent = "Gagal";
+                  pingElement.classList.add("bg-gray-500");
+                  pingElement.classList.add("text-white");
                 }
               })
               .finally(() => {
@@ -1788,16 +1836,35 @@ class Document {
       flagList.push(proxy.country);
     }
 
+    // Gunakan Set untuk mendapatkan negara unik
+    const uniqueCountries = [...new Set(flagList)];
+
     let flagElement = "";
-    flagElement += `<a href="/sub${proxyBankUrl ? "?proxy-list=" + proxyBankUrl : ""}" class="mb-4 w-10 h-10 flex items-center justify-center rounded-full bg-primary text-white font-bold shadow-md" title="Semua Negara">ALL</a>`;
     
-    for (const flag of new Set(flagList)) {
-      flagElement += `<a href="/sub?cc=${flag}${
+    // Header untuk region selector yang fixed di bagian atas
+    flagElement += `<div class="sticky top-0 bg-primary text-white py-3 px-2 rounded-lg mb-4 text-center shadow-md font-medium">Pilih Region</div>`;
+    
+    // All countries button
+    flagElement += `<a href="/sub${proxyBankUrl ? "?proxy-list=" + proxyBankUrl : ""}" 
+      class="mb-2 flex items-center justify-center gap-2 p-2 rounded-lg ${this.url.searchParams.get("cc") ? 'bg-white dark:bg-gray-700 text-primary' : 'bg-primary text-white'} font-medium hover:bg-primary-dark hover:text-white transition-all shadow-sm">
+      <span class="text-lg">🌎</span>
+      <span>Semua Negara</span>
+    </a>`;
+    
+    // Render country buttons in grid
+    flagElement += `<div class="mt-4 grid grid-cols-1 gap-2">`;
+    for (const country of uniqueCountries) {
+      const isActive = this.url.searchParams.get("cc") === country;
+      flagElement += `<a href="/sub?cc=${country}${
         proxyBankUrl ? "&proxy-list=" + proxyBankUrl : ""
-      }" class="my-1 w-10 h-10 flex items-center justify-center rounded-full overflow-hidden border-2 border-transparent hover:border-primary transition-all hover:shadow-md" title="${flag}">
-        <img width="32" src="https://hatscripts.github.io/circle-flags/flags/${flag.toLowerCase()}.svg" />
+      }" class="flex items-center gap-2 p-2 rounded-lg ${isActive ? 'bg-primary text-white' : 'bg-white dark:bg-gray-700 hover:bg-primary-dark hover:text-white'} transition-all shadow-sm">
+        <div class="w-8 h-8 flex items-center justify-center rounded-full overflow-hidden border-2 ${isActive ? 'border-white' : 'border-primary'} shadow-sm">
+          <img width="28" src="https://hatscripts.github.io/circle-flags/flags/${country.toLowerCase()}.svg" />
+        </div>
+        <span class="font-medium">${country}</span>
       </a>`;
     }
+    flagElement += `</div>`;
 
     this.html = this.html.replaceAll("PLACEHOLDER_BENDERA_NEGARA", flagElement);
   }
